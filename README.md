@@ -1,4 +1,5 @@
 # Polaris
+
 Hilti Challenge 2022 Additional Sequence Open Source Evaluation
 
 scenario
@@ -15,5 +16,3 @@ How to get txt file
 Reference
 - https://github.com/haeyeoni/lidar_slam_evaluator
 - https://github.com/MichaelGrupp/evo
-
-
