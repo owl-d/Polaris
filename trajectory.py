@@ -65,12 +65,12 @@ class Trajectory:
                     orientation.append(cor_orientation)
                     time_dur.append((data[0] - init_data[0])*1e+9)
                 elif opt == 5 : #KIIT ref
-                    cor_trajectory = np.dot(init_rot_mtx, [[data[1]-init_data[1]], [data[2]-init_data[2]], [data[3]-init_data[3]]])
+                    cor_trajectory = np.dot(init_rot_mtx, [[data[1]-init_data[1]], [-data[3]+init_data[3]], [data[2]-init_data[2]]])
                     trajectory.append(cor_trajectory.reshape(3))
                     cor_orientation = quat.Quaternion([data[4], data[5], data[6], data[7]]) * init_quat_inv
                     cor_orientation = quat.Quaternion(cor_orientation.normalize())
                     orientation.append(cor_orientation)
-                    time_dur.append((data[0] - init_data[0])*1e-9) #nano_sec
+                    time_dur.append((data[0] - init_data[0])*1e+8) #nano_sec
 
             f.close()
 
