@@ -4,20 +4,26 @@ import trajectory as Trajectory
 import error as Error
 
 ################################# argument #####################################
-scenario = "exp18"
-gt_path="trajectories/Reference/reference_" + scenario + ".txt"
+scenario = "05"
+gt_path="trajectories/Reference/reference_" + scenario + ".txt" #Hilti
+gt_KITTI_path="trajectories/KITTI_gt/" + scenario + ".txt"      #KITTI
 LOAM_path="trajectories/A-LOAM/A-LOAM_" + scenario + ".txt"
 Lego_LOAM_path="trajectories/LeGO-LOAM_LiDAR_only/LeGO-LOAM_LiDAR_only_" + scenario + ".txt"
 Fast_LIO_path = "trajectories/Fast_LIO/fast_lio_" + scenario + ".txt"
 Faster_LIO_path = "trajectories/Faster_LIO/faster_lio_" + scenario + ".txt"
 LIO_SAM_path = "trajectories/LIO-SAM/lio_sam_" + scenario + ".txt"
+BALM_path = "trajectories/BALM/BALM_kitti_"+ scenario + ".txt"
+BALM_backend_path = "trajectories/BALM-backend/BAML-backend_kitti_"+ scenario + ".txt"
 
-gt_traj=Trajectory.Trajectory(gt_path, "Reference")
+
+gt_traj=Trajectory.Trajectory(gt_KITTI_path, "Reference")
 # test_traj=Trajectory.Trajectory(LOAM_path, "LOAM", opt=1)
 # test_traj=Trajectory.Trajectory(Lego_LOAM_path, "Lego_LOAM", opt=2)
 # test_traj=Trajectory.Trajectory(LIO_SAM_path, "LIO_SAM", opt=3)
 # test_traj=Trajectory.Trajectory(Fast_LIO_path, "Fast_LIO", opt=4)
-test_traj=Trajectory.Trajectory(Faster_LIO_path, "Faster_LIO", opt=4)
+# test_traj=Trajectory.Trajectory(Faster_LIO_path, "Faster_LIO", opt=4)
+test_traj=Trajectory.Trajectory(BALM_path, "BALM", opt=1)
+#test_traj=Trajectory.Trajectory(BALM_backend_path, "BALM-backend", opt=1)
 
 error = Error.Error(reference=gt_traj, estimate=test_traj)
 ################################################################################

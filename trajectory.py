@@ -1,7 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
-import rosbag
+#import rosbag
 
 import quaternion as quat
 import math
@@ -38,7 +38,7 @@ class Trajectory:
                     init_rot_mtx = (quat.Quaternion([init_data[4], init_data[5], init_data[6], init_data[7]])**-1).rotation()
                     init_quat_inv = quat.Quaternion(init_data[4:])**-1
                 
-                if opt == 0 : # Referece
+                if opt == 0 : # Hilti Referece
                     cor_trajectory = np.dot(init_rot_mtx, [[data[1]-init_data[1]], [data[2]-init_data[2]], [data[3]-init_data[3]]])
                     trajectory.append(cor_trajectory.reshape(3))
                     cor_orientation = quat.Quaternion([data[4], data[5], data[6], data[7]]) * init_quat_inv
@@ -57,13 +57,20 @@ class Trajectory:
                     trajectory.append([-data[2], -data[1], -data[3]])
                     orientation.append(quat.Quaternion([data[4], data[5], data[6], data[7]]))
                     time_dur.append((data[0] - init_data[0])*1e+9)
-                if opt == 4 : # Faster-LIO, Fast-LIO
+                elif opt == 4 : # Faster-LIO, Fast-LIO
                     cor_trajectory = np.dot(init_rot_mtx, [[data[1]-init_data[1]], [data[2]-init_data[2]], [data[3]-init_data[3]]])
                     trajectory.append(cor_trajectory.reshape(3))
                     cor_orientation = quat.Quaternion([data[5], data[4], data[6], data[7]]) * init_quat_inv
                     cor_orientation = quat.Quaternion(cor_orientation.normalize())
                     orientation.append(cor_orientation)
                     time_dur.append((data[0] - init_data[0])*1e+9)
+                elif opt == 5 : #KIIT ref
+                    cor_trajectory = np.dot(init_rot_mtx, [[data[1]-init_data[1]], [data[2]-init_data[2]], [data[3]-init_data[3]]])
+                    trajectory.append(cor_trajectory.reshape(3))
+                    cor_orientation = quat.Quaternion([data[4], data[5], data[6], data[7]]) * init_quat_inv
+                    cor_orientation = quat.Quaternion(cor_orientation.normalize())
+                    orientation.append(cor_orientation)
+                    time_dur.append((data[0] - init_data[0])*1e-9) #nano_sec
 
             f.close()
 
