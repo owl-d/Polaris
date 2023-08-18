@@ -75,9 +75,10 @@ class Trajectory:
             f.close()
 
 
-        elif file_name.endswith('.bag'):
-            with rosbag.Bag(file_name) as bag:
-                trajectory, orientation, name, time_dur, length = self._read_bag(bag)
+        # elif file_name.endswith('.bag'):
+        #     with rosbag.Bag(file_name) as bag:
+        #         trajectory, orientation, name, time_dur, length = self._read_bag(bag)
+
         else:
             print("unsupported type of data file")
             self.is_None = True
@@ -91,7 +92,7 @@ class Trajectory:
         self.length = length
 
         self.is_gt = False
-        if self.name == 'gt' or self.name == 'ground_truth' or self.name == '/ground_truth': self.is_gt = True
+        if self.name == 'gt' or self.name == 'ground_truth' or self.name == '/ground_truth' or self.name == '/Reference' : self.is_gt = True
         print("{} with length {}".format(self.name, self.length))
 
     def _read_bag(self, bag):
@@ -112,19 +113,22 @@ class Trajectory:
 def plotXYZ(gt, trajs):
     plt.figure(figsize=(6, 10))
     plt.subplot(3, 1, 1)
-    plt.plot(trajs.time, trajs.trajectory[:, 0], label=trajs.name)
+    for traj in trajs:
+        plt.plot(traj.time, traj.trajectory[:, 0], label=traj.name)
     if gt: plt.plot(gt.time, gt.trajectory[:, 0], label=gt.name, ls='--')
     plt.ylabel('x[m]')
     plt.legend()
 
     plt.subplot(3, 1, 2)
-    plt.plot(trajs.time, trajs.trajectory[:, 1], label=trajs.name)
+    for traj in trajs:
+        plt.plot(traj.time, traj.trajectory[:, 1], label=traj.name)
     if gt: plt.plot(gt.time, gt.trajectory[:, 1], label=gt.name, ls='--')
     plt.ylabel('y[m]')
     plt.legend()
 
     plt.subplot(3, 1, 3)
-    plt.plot(trajs.time, trajs.trajectory[:, 2], label=trajs.name)
+    for traj in trajs:
+        plt.plot(traj.time, traj.trajectory[:, 2], label=traj.name)
     if gt: plt.plot(gt.time, gt.trajectory[:, 2], label=gt.name, ls='--')
     plt.ylabel('z[m]')
     plt.xlabel('time[nano_sec]')
@@ -134,13 +138,15 @@ def plot2D(option, gt, trajs):
     plt.figure(figsize=(6, 5))
     plt.title('Top-View')
     if option == 'xy':
-        plt.plot(trajs.trajectory[:, 0], trajs.trajectory[:, 1], label=trajs.name)
+        for traj in trajs:
+            plt.plot(traj.trajectory[:, 0], traj.trajectory[:, 1], label=traj.name)
         if gt: plt.plot(gt.trajectory[:, 0], gt.trajectory[:, 1], label=gt.name, ls='--')
         plt.xlabel("x[m]")
         plt.ylabel("y[m]")
         plt.legend()
     if option == 'xz':
-        plt.plot(trajs.trajectory[:, 0], trajs.trajectory[:, 2], label=trajs.name)
+        for traj in trajs:
+            plt.plot(traj.trajectory[:, 0], traj.trajectory[:, 2], label=traj.name)
         if gt: plt.plot(gt.trajectory[:, 0], gt.trajectory[:, 2], label=gt.name, ls='--')
         plt.xlabel("x[m]")
         plt.ylabel("z[m]")
@@ -150,7 +156,8 @@ def plot3D(gt, trajs):
     from mpl_toolkits.mplot3d import Axes3D
     fig = plt.figure(figsize=(6, 5))
     ax = fig.add_subplot(111, projection='3d')
-    ax.scatter(trajs.trajectory[:, 0], trajs.trajectory[:, 1], trajs.trajectory[:, 2], label=trajs.name)
+    for traj in trajs:
+        ax.scatter(traj.trajectory[:, 0], traj.trajectory[:, 1], traj.trajectory[:, 2], label=traj.name)
     if gt: ax.scatter(gt.trajectory[:, 0], gt.trajectory[:, 1], gt.trajectory[:, 2], label=gt.name)
     ax.legend()
     ax.set_zlim3d(-40, 40)
